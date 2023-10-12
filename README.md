@@ -1,3 +1,9 @@
 # TrabalhoSO1
 1º Trabalho de SO
-O mundo
+Tarefas:
+
+Afazer:
+
+Finalizadas:
+
+README:
