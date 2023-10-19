@@ -20,3 +20,4 @@ if [[ "$vn"  == "1" ]]; then
     fi
 echo "$vn $vr  $vd "
 echo ("teste")
+echo ("teste1")
