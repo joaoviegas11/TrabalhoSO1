@@ -19,4 +19,4 @@ if [[ "$vn"  == "1" ]]; then
     pwd
     fi
 echo "$vn $vr  $vd "
-
+echo ("teste")
