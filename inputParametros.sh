@@ -44,15 +44,16 @@ while [ "$index" -le "$#" ]; do
 
     "-a")
         echo a;
+        sort -n ./testetemp.txt >./temp1
     ;;
     "-l")
-        echo l;
         index=$((index + 1));
         if [[ "${!index}" =~ ^[0-9]+$ ]]; then
             echo "A variável é um número."
         else
             echo "A variável não é um número."
         fi
+        tail -"${!index}" ./temp1 >./temp
     ;;
     "-r")
         echo r;
@@ -61,7 +62,7 @@ while [ "$index" -le "$#" ]; do
         echo ultimo;
         if [ ! -d ${!#} ]; then
             echo "$(pwd)/${!#} é um diretório válido."
-            #exit 1
+            exit 1
         fi
     ;;
      * )
@@ -75,3 +76,22 @@ esac
 done
 
 
+
+
+
+function search_dir(){
+    for dir in "${!#}"; do
+        if [ -d "$dir" ]; then
+            find "$dir" -type d -exec du -s {} \; 2>/dev/null | awk '{print $1, $2}'>testetemp.txt
+        else
+            echo "$dir is not a directory"
+        fi
+    done
+    
+
+}
+
+    
+
+    cat ./temp
+    rm ./temp ./temp1
