@@ -2,12 +2,11 @@
 
 
 index=1
-
 # Loop para percorrer todos os parâmetros
 while [ "$index" -le "$#" ]; do
     #parametro="${!index}"
     #echo "Parâmetro $index: $parametro"
-
+    #Caso ultimo elemento
     case ${!index} in
     "-n")
         echo n;
@@ -36,7 +35,7 @@ while [ "$index" -le "$#" ]; do
         index=$((index + 1));
         #echo "${!index}"
         if [[ "${!index}" =~ ^[0-9]+$ ]]; then
-            #echo "A variável é um número."
+            echo "A variável é um número."
         else
             echo "A variável não é um número."
             exit 1
