@@ -1,13 +1,25 @@
 source ./inputParametros.sh
 
-
 function search_dir(){
-    for dir in "${!#}"; do
+    script_dir=$(pwd)
+    local result=()
+    for dir in "$@"; do
         if [ -d "$dir" ]; then
-            find "$dir" -type d -exec du -s {} \; 2>/dev/null | awk '{print $1, $2}'
-        else
-            echo "$dir is not a directory"
+            mapfile -t result < <(find "$dir" -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null)
         fi
     done
+
+    echo "${result[@]}"
 }
-search_dir "$@"
+
+function search_files(){
+    local directories=($(search_dir "$@"))
+
+    # Loop through the directories and process files
+    for dir in "${directories[@]}"; do
+        echo "Processing files in directory: $dir"
+        # Add your file processing logic here
+    done
+}
+
+search_files "$@"
