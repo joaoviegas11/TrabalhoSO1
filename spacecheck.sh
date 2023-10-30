@@ -5,7 +5,7 @@ function search_dir(){
     local result=()
     for dir in "$@"; do
         if [ -d "$dir" ]; then
-            mapfile -t result < <(find "$dir" -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null)
+            result+=( $(find "$dir" -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null) )
         fi
     done
 
