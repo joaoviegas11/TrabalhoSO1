@@ -14,12 +14,14 @@ function search_dir(){
 
 function search_files(){
     local directories=($(search_dir "$@"))
-
-    # Loop through the directories and process files
+    # if no options
+    echo "SIZE NAME" $(date +'%Y%m%d') #falta o resto dos argumentos de chamada
     for dir in "${directories[@]}"; do
-        echo "Processing files in directory: $dir"
-        # Add your file processing logic here
+        cd $dir
+            size=$(find . -type f -exec du -s {} \; 2>/dev/null | awk '{s+=$1} END {print s}')
+        echo "$size $dir"
     done
+    #fi
 }
 
 search_files "$@"
