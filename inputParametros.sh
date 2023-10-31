@@ -68,4 +68,15 @@ if [[ $limit -gt 0 ]]; then
     tail -"$limit" ./testetemp.txt >./temp
     cat ./temp > ./testetemp.txt
     rm temp
-    fi
+fi
+dataDate='Sep 10 10:00'
+timeFilter=$(date --date=$data +%s) 
+timeNow=$(date +%s)
+echo $timeFilter
+echo $timeNow
+if [[ $timeFilter -gt $timeNow ]]; then 
+    echo maior
+    else
+    echo menor
+fi
+echo "$(date  --date='Dec 10 10:00' +%s)"
