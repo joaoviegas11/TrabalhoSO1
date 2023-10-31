@@ -19,9 +19,10 @@ function search_files(){
     for dir in "${directories[@]}"; do
         cd $dir
             size=$(find . -type f -exec du -s {} \; 2>/dev/null | awk '{s+=$1} END {print s}')
-        if [ -n "$size" ] && [ "$size" -gt 0 ]; then #verificar que size nao esta vazio e se nao estiver verificar que e diferentre de zero
-            echo "$size $dir"
+        if [ -z "$size" ]; then #se size for vazio atribui 0
+            size=0;
         fi
+        echo "$size $dir"
     done
     #fi
 }
