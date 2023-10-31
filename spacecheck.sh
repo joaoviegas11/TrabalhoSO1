@@ -14,6 +14,7 @@ function search_dir(){
 
 function search_files(){
     local directories=($(search_dir "$@"))
+    script_dir=$(pwd)
     # if no options
     echo "SIZE NAME $(date +'%Y%m%d') $*"  #falta o resto dos argumentos de chamada
     for dir in "${directories[@]}"; do
@@ -22,7 +23,8 @@ function search_files(){
         if [ -z "$size" ]; then #se size for vazio atribui 0
             size=0;
         fi
-        echo "$size $dir"
+        relative_dir=$(realpath --relative-to="$script_dir" "$dir")
+        echo "$size $relative_dir"
     done
     #fi
 }
