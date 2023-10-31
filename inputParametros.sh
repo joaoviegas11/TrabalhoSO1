@@ -3,7 +3,6 @@
 ordered=0
 limit=0
 reverse=0
-echo "SIZE NAME $(date +%Y%m%d) $*"
 while getopts ":n:d:s:l:ar" opt; do
 case $opt in
     n)
@@ -70,4 +69,3 @@ if [[ $limit -gt 0 ]]; then
     cat ./temp > ./testetemp.txt
     rm temp
     fi
-cat ./testetemp.txt
