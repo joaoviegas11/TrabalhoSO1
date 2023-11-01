@@ -1,6 +1,0 @@
-12 /home/joaov/SO/aula08
-12 /home/joaov/SO/aula07
-12 /home/joaov/SO/aula06
-1220 /home/joaov/SO/
-116 /home/joaov/SO/aula03
-100 /home/joaov/SO/aula02
