@@ -22,12 +22,16 @@ function search_files(){
     for dir in "${directories[@]}"; do
         cd $dir
          size=0
-        for file in $(find . -type f -size +"$limitFilter"c | grep -E "$regex"); do
+        for file in $(find . -type f | grep -E "$regex"); do
             size=$((size + $(du -s "$file" | awk '{print $1}')))
         done
         relative_dir=$(realpath --relative-to="$script_dir" "$dir")
         echo "$size $relative_dir"
-    done
+    done | if [[ "$reverse" -eq 1 ]]; then
+        sort -n
+    else
+        sort -nr
+    fi
     #fi
 }
 
