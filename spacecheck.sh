@@ -84,6 +84,8 @@ function search_files(){
         echo "$size $relative_dir"
     done | if [[ "$reverse" -eq 1 ]]; then
         sort -n
+        elif [[ "$ordered" -eq 1 ]]; then
+        sort -k 2
     else
         sort -nr
     fi
