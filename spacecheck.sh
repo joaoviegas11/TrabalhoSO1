@@ -1,7 +1,7 @@
-source ./inputParametros.sh
 
 script_dir=$(pwd)
-
+limitFilter=0
+dataDate="Sep 24 10:00"
 function search_dir(){
     local result=()
     
@@ -22,7 +22,7 @@ function search_files(){
     for dir in "${directories[@]}"; do
         cd $dir
          size=0
-        for file in $(find . -type f -size +"$limitFilter"c | grep -E "$regex"); do
+         for file in $(find . -type f -size +"$limitFilter"c -newermt "$(date --date="$dataDate" '+%Y-%m-%d %H:%M:%S')" | grep -E "$regex"); do
             size=$((size + $(du -s "$file" | awk '{print $1}')))
         done
         relative_dir=$(realpath --relative-to="$script_dir" "$dir")
