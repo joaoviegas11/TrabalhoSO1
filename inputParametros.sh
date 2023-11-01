@@ -7,7 +7,7 @@ while getopts ":n:d:s:l:ar" opt; do
 case $opt in
     n)
         echo "Opção n, argumento: $OPTARG"
-        # Implemente a lógica para a opção -n aqui
+        regex=$OPTARG
         ;;
     d)
         echo "Opção d, argumento: $OPTARG"

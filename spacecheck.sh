@@ -16,14 +16,15 @@ function search_dir(){
 
 function search_files(){
     local directories=($(search_dir "$@"))
+    echo "$regex" #tirar depois de testes
     # if no options
     echo "SIZE NAME $(date +'%Y%m%d') $*"
     for dir in "${directories[@]}"; do
         cd $dir
-            size=$(find . -type f -exec du -s {} \; 2>/dev/null | awk '{s+=$1} END {print s}')
-        if [ -z "$size" ]; then #se size for vazio atribui 0
-            size=0;
-        fi
+         size=0
+        for file in $(find . -type f -size +"$limitFilter"c | grep -E "$regex"); do
+            size=$((size + $(du -s "$file" | awk '{print $1}')))
+        done
         relative_dir=$(realpath --relative-to="$script_dir" "$dir")
         echo "$size $relative_dir"
     done
