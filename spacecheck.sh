@@ -27,7 +27,11 @@ function search_files(){
         done
         relative_dir=$(realpath --relative-to="$script_dir" "$dir")
         echo "$size $relative_dir"
-    done
+    done | if [[ "$reverse" -eq 1 ]]; then
+        sort -n
+    else
+        sort -nr
+    fi
     #fi
 }
 
