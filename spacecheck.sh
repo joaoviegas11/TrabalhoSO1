@@ -86,6 +86,8 @@ function search_files(){
         sort -n
         elif [[ "$ordered" -eq 1 ]]; then
         sort -k 2
+        elif [[ "$limit" -gt 0 ]]; then
+        sort -nr | head -n "$limit"
     else
         sort -nr
     fi
