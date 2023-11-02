@@ -89,13 +89,13 @@ function search_files(){
             echo "NA $(realpath --relative-to="$script_dir" "$dir")"
         fi
     done | if [[ "$reverse" -eq 1 ]]; then
-        sort -n
+        sort -k 1,1n -k 2
         elif [[ "$ordered" -eq 1 ]]; then
         sort -k 2
         elif [[ "$limit" -gt 0 ]]; then
-        sort -nr | head -n "$limit"
+        sort -k 1,1nr | head -n "$limit"
     else
-        sort -nr
+        sort -k 1,1nr
     fi
     #fi
 }
