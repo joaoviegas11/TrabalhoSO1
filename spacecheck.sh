@@ -1,6 +1,5 @@
-
 script_dir=$(pwd)
-dataDate="Jan 1"
+dataDate="now"
 limitFilter=0
 ordered=0
 limit=0
@@ -74,9 +73,9 @@ function search_files(){
     local directories=($(search_dir "$@"))
     echo "$regex" #tirar depois de testes
     # if no options
-    echo "SIZE NAME $(date +'%Y%m%d') $*"
+    echo "SIZE NAME $(date +'%Y%m%d') $@"
     for dir in "${directories[@]}"; do
-        if cd $dir 2>/dev/null; then
+        if cd $dir 2>/dev/null && [ -z "$(find . -type f ! -readable)" ]; then
         size=0
         for file in $(find . -type f -size +"$limitFilter"c -not -newermt "$(date --date="$dataDate" '+%Y-%m-%d %H:%M:%S')" | grep -E "$regex"); do
             size=$((size + $(du -s "$file" | awk '{print $1}')))
