@@ -4,14 +4,15 @@ limitFilter=0
 ordered=0
 limit=0
 reverse=0
+diretorios=()
 while getopts ":n:d:s:l:ar" opt; do
 case $opt in
     n)
-        echo "Opção n, argumento: $OPTARG"
+        #echo "Opção n, argumento: $OPTARG"
         regex=$OPTARG
         ;;
     d)
-        echo "Opção d, argumento: $OPTARG"
+        #echo "Opção d, argumento: $OPTARG"
         dataDate=$OPTARG
         # Implemente a lógica para a opção -d aqui
         ;;
@@ -32,7 +33,7 @@ case $opt in
         # Implemente a lógica para a opção -a aqui
         ;;
     l)
-        echo "Opção l, argumento: $OPTARG"
+        #echo "Opção l, argumento: $OPTARG"
         if [[ "$OPTARG" =~ ^[0-9]+$ ]]; then
             limit=$OPTARG
         else
@@ -56,10 +57,13 @@ case $opt in
         ;;
 esac
 done
+shift $((OPTIND - 1))
+
+
 function search_dir(){
     local result=()
     
-    for dir in "${!#}"; do
+    for dir in "$@"; do
         if [ -d "$dir" ]; then
             result+=("$(find "$dir" -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null)")
         fi
