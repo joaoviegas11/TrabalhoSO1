@@ -4,13 +4,14 @@
 #Diogo Domingues    114192
 #João Viegas        113144
 
-script_dir=$(pwd)   #diretorio em que o script se encontra quando executado
-regex=".*"          #regex para os ficheiros será ".*" se a opção -n não for usada, ou seja, incluirá todos os ficheiros
-dataDate="now"      #data de modificação dos ficheiros será a atual se a opção -d não for usada
-limitFilter=0       #tamanho mínimo dos ficheiros será 0 se a opção -s não for usada, ou seja, incluirá todos os ficheiros
-ordered=0           #variavél para indicar se a opção -a foi usada
-limit=0             #variavél para indicar se a opção -l foi usada
-reverse=0           #variavél para indicar se a opção -r foi usada
+#declaração de variáveis
+declare script_dir=$(pwd)   #diretorio em que o script se encontra quando executado
+declare regex=".*"          #regex para os ficheiros será ".*" se a opção -n não for usada, ou seja, incluirá todos os ficheiros
+declare dataDate="now"      #data de modificação dos ficheiros será a atual se a opção -d não for usada
+declare limitFilter=0       #tamanho mínimo dos ficheiros será 0 se a opção -s não for usada, ou seja, incluirá todos os ficheiros
+declare ordered=0           #flag para indicar se a opção -a foi usada
+declare limit=0             #flag para indicar se a opção -l foi usada
+declare reverse=0           #flag para indicar se a opção -r foi usada
 
 echo "SIZE NAME $(date +'%Y%m%d') $@"   #imprimir o cabeçalho da tabela com a data atual e os argumentos de chamada, o cabeçalho precisa de ser chamado antes do shift $((OPTIND - 1)) para que os argumentos de chamada não sejam removidos
 
