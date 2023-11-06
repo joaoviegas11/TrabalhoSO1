@@ -8,28 +8,24 @@ while getopts ":l:ar" opt; do
 case $opt in
     a)
         ordered=1
-        # Implemente a lógica para a opção -a aqui
         ;;
     l)
-        #echo "Opção l, argumento: $OPTARG"
         if [[ "$OPTARG" =~ ^[0-9]+$ ]]; then
             limit=$OPTARG
         else
-            echo "A variável não é um número."
+            echo "O argumento não é um número."
             exit 1
         fi
-        #tail -"$OPTARG" ./temp1 >./temp
-        # Implemente a lógica para a opção -l aqui
         ;;
     r)
         reverse=1
         ;;
     \?)
-        echo "Opção inválida: -$OPTARG" >&2
+        echo "Parametro inválido: -$OPTARG" >&2
         exit 1
         ;;
     :)
-        echo "A opção -$OPTARG requer um argumento." >&2
+        echo "O parametro -$OPTARG requer um argumento." >&2
         exit 1
         ;;
 esac
@@ -50,12 +46,13 @@ while read -r line; do
 done < <(tail -n +2 "$1")
 
 for i in "${!oldArray[@]}"; do
-    if [[ -n "${newArray[$i]}" ]]; then
+    if [[ "${oldArray[$i]}" == "NA" || "${newArray[$i]}" == "NA" ]]; then
+        diffArray["$i"]="NA"
+    elif [[ -n "${newArray[$i]}" ]]; then
         diffArray["$i"]=$((newArray["$i"] - oldArray["$i"]))
     else
         diffArray["$i"]=$((-oldArray["$i"]))
     fi
-    #echo "result= $i: ${diffArray[$i]}"
 done
 echo "SIZE NAME"
 for i in "${!diffArray[@]}"; do
@@ -68,9 +65,9 @@ for i in "${!diffArray[@]}"; do
     echo "${diffArray[$i]} $i $memory"
 done | if [[ "$reverse" -eq 1 ]]; then      #se a opção -r foi usada nos argumentos de chamada, então imprimir os resultados por ordem reversa,ou seja, por ordem crescente
         sort -k 1,1n -k 2
-        elif [[ "$ordered" -eq 1 ]]; then       #se a opção -a foi usada nos argumentos de chamada, então imprimir os resultados ordenando-os pelo nome
+    elif [[ "$ordered" -eq 1 ]]; then       #se a opção -a foi usada nos argumentos de chamada, então imprimir os resultados ordenando-os pelo nome
         sort -k 2
-        elif [[ "$limit" -gt 0 ]]; then         #se a opção -l foi usada nos argumentos de chamada, então imprimir apenas o número de linhas pretendido
+    elif [[ "$limit" -gt 0 ]]; then         #se a opção -l foi usada nos argumentos de chamada, então imprimir apenas o número de linhas pretendido
         sort -k 1,1nr | head -n "$limit"
     else
         sort -k 1,1nr                           #se nenhuma das opções de ordenação foi usada, então imprimir os resultados por ordem decrescente
