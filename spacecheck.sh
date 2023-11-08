@@ -79,7 +79,7 @@ function search_files(){    #a função search_files irá receber os diretórios
         if cd $dir 2>/dev/null && [ -z "$(find . -type f ! -readable)" ]; then  #se for possivel aceder aos diretórios e subdiretórios e todos os ficheiros dentro destes forem legiveis iremos calcular o tamanho dos ficheiros nos diretórios e subdiretórios
         size=0      #atribuir o valor 0 à variável size para esta náo ser nula
         for file in $(find . -type f -size +"$limitFilter"c -not -newermt "$(date --date="$dataDate" '+%Y-%m-%d %H:%M:%S')" | grep -E "$regex"); do     #ciclo for que irá procurar os ficheiros que cumpram as condições introduzidas nos argumentos
-            size=$((size + $(du -s "$file" | awk '{print $1}')))    #calcular o tamanho dos ficheiros que cumpram as condições introduzidas nos argumentos e acumular na variável size
+            size=$((size + $(du -sb "$file" | awk '{print $1}')))    #calcular o tamanho dos ficheiros que cumpram as condições introduzidas nos argumentos e acumular na variável size
         done
         echo "$size $(realpath --relative-to="$script_dir" "$dir")"     #imprimir o tamanho total dos ficheiros no diretório que acabou de ser calculado e usando o realpath imprimir apenas o caminho que difere do diretório onde o script se encontra
         else
