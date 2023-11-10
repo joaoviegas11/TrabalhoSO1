@@ -87,13 +87,6 @@ function search_dir(){
             #Se existir, procurar os subdiretórios e adiciona-los à lista
             directories+=("$(find "$dir" -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null)")
         else
-<<<<<<< HEAD
-            echo "Directory $dir does not exist"  #se o diretório introduzido no argumento não existir, apresentar mensagem de erro
-        fi
-    done
-    directories=($(printf "%s\n" "${directories[@]}" | sort | uniq))
-    echo "${directories[*]}"    #retornar o array com os diretórios e subdiretórios
-=======
             #Se não existir, apresentar mensagem de erro e usar o diretório atual
             echo "Directory $dir does not exist" >&2
             echo "Using current directory instead" >&2
@@ -101,9 +94,8 @@ function search_dir(){
             directories+=("$(find . -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null)")
         fi
     done
-
+    directories=($(printf "%s\n" "${directories[@]}" | sort | uniq))
     echo "${directories[*]}"   #Devolver a lista de diretórios e subdiretórios
->>>>>>> refs/remotes/origin/main
 }
 
 function search_files(){

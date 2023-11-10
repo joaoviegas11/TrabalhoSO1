@@ -103,25 +103,25 @@ for i in "${!diffArray[@]}"; do
     fi
 
     done | if [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]]; then 
-        #Se a flag ordered for 1 e a flag reverse for 1, então imprimir os resultados por ordem alfabetica inversa
+        #imprimir os resultados por ordem alfabetica inversa
         sort -k 2r
         elif [[ "$reverse" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
-        #Se a flag reverse for 1 e a variável limit for maior que 0, então imprimir os resultados por ordem crescente e limitar o número de linhas
+        #imprimir os resultados por ordem crescente e limitar o número de linhas
         sort -k 1,1n -k 2 | head -n "$limit"
         elif [[ "$ordered" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
-        #Se a flag ordered for 1 e a variável limit for maior que 0, então imprimir os resultados por ordem alfabetica e limitar o número de linhas
+        #imprimir os resultados por ordem alfabetica e limitar o número de linhas
         sort -k 2 | head -n "$limit"
         elif [[ "$reverse" -eq 1 ]]; then
-        #Se a flag reverse for 1, então imprimir os resultados por ordem crescente
+        #imprimir os resultados por ordem crescente
         sort -k 1,1n -k 2
         elif [[ "$ordered" -eq 1 ]]; then
-        #Se a flag ordered for 1, então imprimir os resultados por ordem alfabetica
+        #imprimir os resultados por ordem alfabetica
         sort -k 2
         elif [[ "$limit" -gt 0 ]]; then
-        #Se a variável limit for maior que 0, então imprimir os resultados limitando o número de linhas
+        #imprimir os resultados limitando o número de linhas
         sort -k 1,1nr | head -n "$limit"
         else
-        #Se nenhuma das opções de ordenação for usada, então imprimir os resultados por ordem decrescente
+        #imprimir os resultados por ordem decrescente
         sort -k 1,1nr
     fi
 }
