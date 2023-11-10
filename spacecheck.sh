@@ -4,7 +4,7 @@
 #Diogo Domingues    114192
 #João Viegas        113144
 
-#declaração de variáveis
+#Declaração de variáveis
 declare script_dir=$(pwd)   #diretorio em que o script se encontra quando executado
 declare regex=".*"          #regex para os ficheiros será ".*" se a opção -n não for usada, ou seja, incluirá todos os ficheiros
 declare dataDate="now"      #data de modificação dos ficheiros será a atual se a opção -d não for usada
@@ -85,7 +85,13 @@ function search_files(){    #a função search_files irá receber os diretórios
         else
             echo "NA $(realpath --relative-to="$script_dir" "$dir")"    #se não for possivel aceder aos diretórios e subdiretórios ou algum dos ficheiros dentro destes não forem legiveis, imprimir NA no tamanho dos ficheiros no diretório e usando o realpath imprimir apenas o caminho que difere do diretório onde o script se encontra
         fi
-    done | if [[ "$reverse" -eq 1 ]]; then      #se a opção -r foi usada nos argumentos de chamada, então imprimir os resultados por ordem reversa,ou seja, por ordem crescente
+    done | if [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]]; then 
+        sort -k 2r
+        elif [[ "$reverse" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
+        sort -k 1,1n -k 2 | head -n "$limit"
+        elif [[ "$ordered" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
+        sort -k 2 | head -n "$limit"
+        elif [[ "$reverse" -eq 1 ]]; then      #se a opção -r foi usada nos argumentos de chamada, então imprimir os resultados por ordem reversa,ou seja, por ordem crescente
         sort -k 1,1n -k 2
         elif [[ "$ordered" -eq 1 ]]; then       #se a opção -a foi usada nos argumentos de chamada, então imprimir os resultados ordenando-os pelo nome
         sort -k 2
