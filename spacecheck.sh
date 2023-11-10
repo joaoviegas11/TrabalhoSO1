@@ -20,8 +20,13 @@ case $opt in
     n)
         regex=$OPTARG                   #se a opção -n for usada, alterar o valor da variável regex para o introduzido pelo utilizador
         ;;
-    d)
-        dataDate=$OPTARG                #se a opção -d for usada, alterar o valor da variável dataDate para o introduzido pelo utilizador
+    d)  
+        if date -d "$OPTARG" &>/dev/null; then
+            dataDate=$OPTARG  
+        else
+            echo "Argument is not valid date."
+        fi
+                      #se a opção -d for usada, alterar o valor da variável dataDate para o introduzido pelo utilizador
         ;;
     s)
         if [[ "$OPTARG" =~ ^[0-9]+$ ]]; then

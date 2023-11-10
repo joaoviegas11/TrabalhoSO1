@@ -79,7 +79,7 @@ done
 
 echo "SIZE NAME"
 for i in "${!diffArray[@]}"; do
-    memory=""
+    local memory=""
     #Se o diretorio não exirtir no novo ficheiro
     if [[ -z "${newArray[$i]}" ]]; then
         memory="REMOVED"
@@ -92,7 +92,6 @@ for i in "${!diffArray[@]}"; do
     if [[ "${diffArray[$i]}" != "NA" ]]; then
         echo "${diffArray[$i]} $i $memory"
     fi
-    #Problema NA
 
 done | if [[ "$reverse" -eq 1 ]]; then      #se a opção -r foi usada nos argumentos de chamada, então imprimir os resultados por ordem reversa,ou seja, por ordem crescente
         sort -k 1,1n -k 2
