@@ -94,7 +94,9 @@ function search_dir(){
             directories+=("$(find . -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null)")
         fi
     done
-    directories=($(printf "%s\n" "${directories[@]}" | sort | uniq))
+
+    directories=($(printf "%s\n" "${directories[@]}" | sort | uniq)) #Remover diretórios duplicados
+
     echo "${directories[*]}"   #Devolver a lista de diretórios e subdiretórios
 }
 
@@ -126,32 +128,31 @@ function search_files(){
             echo "NA $(realpath --relative-to="$script_dir" "$dir")"
         fi
 
-    done | if [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]]; then 
-        #Se a flag ordered for 1 e a flag reverse for 1, então imprimir os resultados por ordem alfabetica inversa
+    done | if [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
+        #Ordenar os resultados por ordem alfabetica inversa e limitar o número de linhas
+        sort -k 2r | head -n "$limit"
+        elif [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]]; then 
+        #Ordenar os resultados por ordem alfabetica inversa
         sort -k 2r
         elif [[ "$reverse" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
-        #Se a flag reverse for 1 e a variável limit for maior que 0, então imprimir os resultados por ordem crescente e limitar o número de linhas
+        #Ordenar os resultados por ordem crescente e limitar o número de linhas
         sort -k 1,1n -k 2 | head -n "$limit"
         elif [[ "$ordered" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
-        #Se a flag ordered for 1 e a variável limit for maior que 0, então imprimir os resultados por ordem alfabetica e limitar o número de linhas
+        #Ordenar os resultados por ordem alfabetica e limitar o número de linhas
         sort -k 2 | head -n "$limit"
         elif [[ "$reverse" -eq 1 ]]; then
-        #Se a flag reverse for 1, então imprimir os resultados por ordem crescente
+        #Ordenar os resultados por ordem crescente
         sort -k 1,1n -k 2
         elif [[ "$ordered" -eq 1 ]]; then
-        #Se a flag ordered for 1, então imprimir os resultados por ordem alfabetica
+        #Ordenar os resultados por ordem alfabetica
         sort -k 2
         elif [[ "$limit" -gt 0 ]]; then
-        #Se a variável limit for maior que 0, então imprimir os resultados limitando o número de linhas
+        #Limitar o número de linhas
         sort -k 1,1nr | head -n "$limit"
         else
-        #Se nenhuma das opções de ordenação for usada, então imprimir os resultados por ordem decrescente
+        #Ordenar os resultados por ordem decrescente
         sort -k 1,1nr
     fi
 }
-<<<<<<< HEAD
-search_files "$@"
-=======
 
 search_files "$@"
->>>>>>> refs/remotes/origin/main
