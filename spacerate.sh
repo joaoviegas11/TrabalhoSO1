@@ -25,11 +25,11 @@ case $opt in
         reverse=1                   #se a opção -r for usada, alterar o valor da variável reverse para 1 para usar mais tarde no sort
         ;;
     \?)
-        echo "Invalid parameter: -$OPTARG" >&2     #se a opção introduzida não for válida, apresentar mensagem de erro e sair
+        echo "Invalid parameter: -$OPTARG"     #se a opção introduzida não for válida, apresentar mensagem de erro e sair
         exit 1
         ;;
     :)
-        echo "Parameter -$OPTARG needs an argument." >&2   #se a opção introduzida necessitar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
+        echo "Parameter -$OPTARG needs an argument."   #se a opção introduzida necessitar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
         exit 1
         ;;
 esac

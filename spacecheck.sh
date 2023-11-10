@@ -25,6 +25,7 @@ case $opt in
             dataDate=$OPTARG  
         else
             echo "Argument is not valid date."
+            exit 1
         fi
                       #se a opção -d for usada, alterar o valor da variável dataDate para o introduzido pelo utilizador
         ;;
@@ -51,11 +52,11 @@ case $opt in
         reverse=1                   #se a opção -r for usada, alterar o valor da variável reverse para 1 para usar mais tarde no sort
         ;;
     \?)
-        echo "Invalid parameter: -$OPTARG" >&2     #se a opção introduzida não for válida, apresentar mensagem de erro e sair
+        echo "Invalid parameter: -$OPTARG"      #se a opção introduzida não for válida, apresentar mensagem de erro e sair
         exit 1
         ;;
     :)
-        echo "Parameter -$OPTARG needs an argument." >&2   #se a opção introduzida necessitar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
+        echo "Parameter -$OPTARG needs an argument."    #se a opção introduzida necessitar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
         exit 1
         ;;
 esac 
@@ -70,10 +71,10 @@ function search_dir(){  #a função search_dir irá receber os diretórios a ser
         if [ -d "$dir" ]; then 
             directories+=("$(find "$dir" -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null)") #se o diretório introduzido no argumento existir, procurar os subdiretórios e adicionar tanto o diretório como os subdiretórios ao array com o caminho a partir da raiz com uma nova linha como separador, ignorando os erros
         else
-            echo "Directory $dir does not exist" >&2   #se o diretório introduzido no argumento não existir, apresentar mensagem de erro
+            echo "Directory $dir does not exist"  #se o diretório introduzido no argumento não existir, apresentar mensagem de erro
         fi
     done
-
+    directories=($(printf "%s\n" "${directories[@]}" | sort | uniq))
     echo "${directories[*]}"    #retornar o array com os diretórios e subdiretórios
 }
 
@@ -106,5 +107,4 @@ function search_files(){    #a função search_files irá receber os diretórios
         sort -k 1,1nr                           #se nenhuma das opções de ordenação foi usada, então imprimir os resultados por ordem decrescente
     fi
 }
-
 search_files "$@"
