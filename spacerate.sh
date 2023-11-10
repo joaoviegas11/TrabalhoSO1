@@ -5,7 +5,7 @@ declare -A diffArray
 
 #Declaração de variáveis
 declare ordered=0           #Flag para indicar se a opção -a foi usada
-declare limit=0             #Flag para indicar se a opção -l foi usada
+declare limit=0             #Variável para indicar se a opção -l foi usada que guarda o número de linhas a imprimir
 declare reverse=0           #Flag para indicar se a opção -r foi usada
 
 #Ciclo que verifica quais os argumentos de chamada usados
