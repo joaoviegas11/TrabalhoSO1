@@ -3,37 +3,46 @@ declare -A newArray
 declare -A oldArray
 declare -A diffArray
 
-#declaração de variáveis
-declare ordered=0           #flag para indicar se a opção -a foi usada
-declare limit=0             #flag para indicar se a opção -l foi usada
-declare reverse=0           #flag para indicar se a opção -r foi usada
+#Declaração de variáveis
+declare ordered=0           #Flag para indicar se a opção -a foi usada
+declare limit=0             #Flag para indicar se a opção -l foi usada
+declare reverse=0           #Flag para indicar se a opção -r foi usada
 
-while getopts ":l:ar" opt; do  #ciclo while irá verificar quais os argumentos de chamada que foram usados
+#Ciclo que verifica quais os argumentos de chamada usados
+while getopts ":l:ar" opt; do 
 case $opt in
     a)
-        ordered=1                    #se a opção -a for usada, alterar o valor da variável ordered para 1 para usar mais tarde no sort
+        #Se a opção -a for usada, alterar a flag ordered para 1
+        ordered=1
         ;;
     l)
         if [[ "$OPTARG" =~ ^[0-9]+$ ]]; then
-            limit=$OPTARG           #se a opção -l for usada e o valor introduzido for um número, alterar o valor da variável limit para o introduzido pelo utilizador para usar mais tarde no sort
+            #Se a opção -l for usada e o valor for um número, alterar a variável limit
+            limit=$OPTARG
         else
-            echo "Argument is not a number"  #se a opção -l for usada e o valor introduzido não for um número, apresentar mensagem de erro e sair
+            #Se o valor não for um número, apresentar mensagem de erro e sair
+            echo "Argument is not a number"
             exit 1
         fi
         ;;
     r)
-        reverse=1                   #se a opção -r for usada, alterar o valor da variável reverse para 1 para usar mais tarde no sort
+        #Se a opção -r for usada, alterar a flag reverse para 1
+        reverse=1
         ;;
     \?)
-        echo "Invalid parameter: -$OPTARG" >&2     #se a opção introduzida não for válida, apresentar mensagem de erro e sair
+        #Se o parametro introduzido não for válido, apresentar mensagem de erro e sair
+        echo "Invalid parameter: -$OPTARG" >&2 
         exit 1
         ;;
     :)
-        echo "Parameter -$OPTARG needs an argument." >&2   #se a opção introduzida necessitar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
+        #Se o parametro introduzido precisar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
+        echo "Parameter -$OPTARG needs an argument." >&2
         exit 1
         ;;
 esac
 done
+
+#Remover os argumentos de chamada usados
 shift $((OPTIND - 1))
 
 #Verificação se são passados 2 ficheiros.
@@ -93,16 +102,29 @@ for i in "${!diffArray[@]}"; do
         echo "${diffArray[$i]} $i $memory"
     fi
 
-done | if [[ "$reverse" -eq 1 ]]; then      #se a opção -r foi usada nos argumentos de chamada, então imprimir os resultados por ordem reversa,ou seja, por ordem crescente
+    done | if [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]]; then 
+        #Se a flag ordered for 1 e a flag reverse for 1, então imprimir os resultados por ordem alfabetica inversa
+        sort -k 2r
+        elif [[ "$reverse" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
+        #Se a flag reverse for 1 e a variável limit for maior que 0, então imprimir os resultados por ordem crescente e limitar o número de linhas
+        sort -k 1,1n -k 2 | head -n "$limit"
+        elif [[ "$ordered" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
+        #Se a flag ordered for 1 e a variável limit for maior que 0, então imprimir os resultados por ordem alfabetica e limitar o número de linhas
+        sort -k 2 | head -n "$limit"
+        elif [[ "$reverse" -eq 1 ]]; then
+        #Se a flag reverse for 1, então imprimir os resultados por ordem crescente
         sort -k 1,1n -k 2
-    elif [[ "$ordered" -eq 1 ]]; then       #se a opção -a foi usada nos argumentos de chamada, então imprimir os resultados ordenando-os pelo nome
+        elif [[ "$ordered" -eq 1 ]]; then
+        #Se a flag ordered for 1, então imprimir os resultados por ordem alfabetica
         sort -k 2
-    elif [[ "$limit" -gt 0 ]]; then         #se a opção -l foi usada nos argumentos de chamada, então imprimir apenas o número de linhas pretendido
+        elif [[ "$limit" -gt 0 ]]; then
+        #Se a variável limit for maior que 0, então imprimir os resultados limitando o número de linhas
         sort -k 1,1nr | head -n "$limit"
-    else
-        sort -k 1,1nr                           #se nenhuma das opções de ordenação foi usada, então imprimir os resultados por ordem decrescente
+        else
+        #Se nenhuma das opções de ordenação for usada, então imprimir os resultados por ordem decrescente
+        sort -k 1,1nr
     fi
-  
 }
+
 read_files "$@"
 calc_difference
