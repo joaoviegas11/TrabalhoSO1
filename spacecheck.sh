@@ -9,10 +9,8 @@ declare script_dir=$(pwd)   #Diretorio em que o script se encontra quando execut
 declare regex=".*"          #Variável para filtar os ficheiros por nome, por defeito será qualquer nome
 declare dataDate="now"      #Variável para filtrar os ficheiros por data, por defeito será a data atual
 declare limitFilter=0       #Variável para filtrar os ficheiros por tamanho, por defeito será 0
-declare ordered=0           #Flag para indicar se a opção -a foi usada
 declare limit=0             #Variável para indicar se a opção -l foi usada que guarda o número de linhas a imprimir
-declare reverse=0           #Flag para indicar se a opção -r foi usada
-
+declare sort_options="-k 1,1nr"
 #É necessário imprimir o cabeçalho antes de se fazer shift para que os argumentos de chamada não sejam alterados
 echo "SIZE NAME $(date +'%Y%m%d') $@"   
 
@@ -44,8 +42,11 @@ case $opt in
         fi
         ;;
     a)
-        #Se a opção -a for usada, alterar a flag ordered para 1
-        ordered=1
+        if [[ "$sort_options" != "-k 1,1nr" ]]; then
+            sort_options="-k 2r"
+        else 
+            sort_options=$"-k 2"
+        fi
         ;;
     l)
         if [[ "$OPTARG" =~ ^[0-9]+$ ]]; then
@@ -58,8 +59,11 @@ case $opt in
         fi
         ;;
     r)
-        #Se a opção -r for usada, alterar a flag reverse para 1
-        reverse=1
+        if [[ "$sort_options" != "-k 1,1nr" ]]; then
+            sort_options+="r"
+        else 
+            sort_options=$"-k 1,1n"
+        fi
         ;;
     \?)
         #Se o parametro introduzido não for válido, apresentar mensagem de erro e sair
@@ -133,31 +137,13 @@ function search_files(){
             echo "NA $(realpath --relative-to="$script_dir" "$dir")"
         fi
 
-    done | if [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
-        #Ordenar os resultados por ordem alfabetica inversa e limitar o número de linhas
-        sort -k 2r | head -n "$limit"
-        elif [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]]; then 
-        #Ordenar os resultados por ordem alfabetica inversa
-        sort -k 2r
-        elif [[ "$reverse" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
-        #Ordenar os resultados por ordem crescente e limitar o número de linhas
-        sort -k 1,1n -k 2 | head -n "$limit"
-        elif [[ "$ordered" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
-        #Ordenar os resultados por ordem alfabetica e limitar o número de linhas
-        sort -k 2 | head -n "$limit"
-        elif [[ "$reverse" -eq 1 ]]; then
-        #Ordenar os resultados por ordem crescente
-        sort -k 1,1n -k 2
-        elif [[ "$ordered" -eq 1 ]]; then
-        #Ordenar os resultados por ordem alfabetica
-        sort -k 2
-        elif [[ "$limit" -gt 0 ]]; then
+    done | if [[ "$limit" -gt 0 ]]; then
         #Limitar o número de linhas
-        sort -k 1,1nr | head -n "$limit"
+        sort "$sort_options" | head -n "$limit"
         else
-        #Ordenar os resultados por ordem decrescente
-        sort -k 1,1nr
+            sort "$sort_options"
     fi
+
 }
 
 search_files "$@"
