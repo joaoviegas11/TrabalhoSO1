@@ -7,15 +7,17 @@ declare -A diffArray
 declare ordered=0           #Flag para indicar se a opção -a foi usada
 declare limit=0             #Variável para indicar se a opção -l foi usada que guarda o número de linhas a imprimir
 declare limit=0             #Variável para indicar se a opção -l foi usada que guarda o número de linhas a imprimir
-declare sort_options="-k 1,1nr"
+declare sort_options="-k 1,1nr"     #Váriavel para guardar as opções de ordenação, por defeito será ordenar por tamanho decrescente
 
 #Ciclo que verifica quais os argumentos de chamada usados
 while getopts ":l:ar" opt; do 
 case $opt in
     a)
         if [[ "$sort_options" != "-k 1,1nr" ]]; then
+            #Ordenar por ordem alfabética inversa
             sort_options="-k 2r"
         else 
+            #Ordenar por ordem alfabética
             sort_options=$"-k 2"
         fi
         ;;
@@ -31,8 +33,10 @@ case $opt in
         ;;
     r)
         if [[ "$sort_options" != "-k 1,1nr" ]]; then
+            #Ordenar por ordem alfabética inversa
             sort_options+="r"
         else 
+            #Ordenar por ordem crescente
             sort_options=$"-k 1,1n"
         fi
         ;;
