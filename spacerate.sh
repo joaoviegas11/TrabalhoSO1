@@ -4,8 +4,6 @@ declare -A oldArray
 declare -A diffArray
 
 #Declaração de variáveis
-declare ordered=0           #Flag para indicar se a opção -a foi usada
-declare limit=0             #Variável para indicar se a opção -l foi usada que guarda o número de linhas a imprimir
 declare limit=0             #Variável para indicar se a opção -l foi usada que guarda o número de linhas a imprimir
 declare sort_options="-k 1,1nr"     #Váriavel para guardar as opções de ordenação, por defeito será ordenar por tamanho decrescente
 
