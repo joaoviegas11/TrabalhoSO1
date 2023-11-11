@@ -102,26 +102,29 @@ for i in "${!diffArray[@]}"; do
         echo "${diffArray[$i]} $i $memory"
     fi
 
-    done | if [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]]; then 
-        #imprimir os resultados por ordem alfabetica inversa
+    done | if [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
+        #Ordenar os resultados por ordem alfabetica inversa e limitar o número de linhas
+        sort -k 2r | head -n "$limit"
+        elif [[ "$ordered" -eq 1 ]] && [[ "$reverse" -eq 1 ]]; then 
+        #Ordenar os resultados por ordem alfabetica inversa
         sort -k 2r
         elif [[ "$reverse" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
-        #imprimir os resultados por ordem crescente e limitar o número de linhas
+        #Ordenar os resultados por ordem crescente e limitar o número de linhas
         sort -k 1,1n -k 2 | head -n "$limit"
         elif [[ "$ordered" -eq 1 ]] && [[ "$limit" -gt 0 ]]; then
-        #imprimir os resultados por ordem alfabetica e limitar o número de linhas
+        #Ordenar os resultados por ordem alfabetica e limitar o número de linhas
         sort -k 2 | head -n "$limit"
         elif [[ "$reverse" -eq 1 ]]; then
-        #imprimir os resultados por ordem crescente
+        #Ordenar os resultados por ordem crescente
         sort -k 1,1n -k 2
         elif [[ "$ordered" -eq 1 ]]; then
-        #imprimir os resultados por ordem alfabetica
+        #Ordenar os resultados por ordem alfabetica
         sort -k 2
         elif [[ "$limit" -gt 0 ]]; then
-        #imprimir os resultados limitando o número de linhas
+        #Limitar o número de linhas
         sort -k 1,1nr | head -n "$limit"
         else
-        #imprimir os resultados por ordem decrescente
+        #Ordenar os resultados por ordem decrescente
         sort -k 1,1nr
     fi
 }
