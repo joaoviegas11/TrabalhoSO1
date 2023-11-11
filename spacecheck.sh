@@ -82,7 +82,7 @@ function search_dir(){
     local directories=()    #Criação de uma lista para guardar os diretórios e subdiretórios
     
     if [ "$#" -eq 0 ]; then     
-        #Se não forem passados argumentos, usar o diretório atual
+        #Se não for passado nenhum diretório como argumento, apresentar mensagem de erro e usar o diretório atual
         echo "Directory not specified, using current directory instead" >&2
         directories+=("$(find . -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null)")
     fi
