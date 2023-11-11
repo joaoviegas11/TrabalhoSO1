@@ -76,12 +76,17 @@ done
 #Remover os argumentos de chamada usados
 shift $((OPTIND - 1))
 
-
 function search_dir(){ 
     #Função que recebe diretórios como argumentos e procura os seus subdiretórios
 
     local directories=()    #Criação de uma lista para guardar os diretórios e subdiretórios
     
+    if [ "$#" -eq 0 ]; then     
+        #Se não forem passados argumentos, usar o diretório atual
+        echo "Directory not specified, using current directory instead" >&2
+        directories+=("$(find . -type d -exec printf "%s\n" "$script_dir/{}" \; 2>/dev/null)")
+    fi
+
     for dir in "$@"; do     #Ciclo for para percorrer todos os diretórios introduzidos
         if [ -d "$dir" ]; then      #Verificar se o diretório existe
             #Se existir, procurar os subdiretórios e adiciona-los à lista
