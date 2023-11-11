@@ -149,9 +149,5 @@ function search_files(){
         sort -k 1,1nr
     fi
 }
-<<<<<<< HEAD
-search_files "$@"
-=======
 
 search_files "$@"
->>>>>>> refs/remotes/origin/main
