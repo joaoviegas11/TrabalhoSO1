@@ -149,7 +149,6 @@ function search_files(){
     else
         sort "$sort_options"
     fi
-    echo
 }
 
 search_files "$@"
