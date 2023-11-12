@@ -73,6 +73,7 @@ case $opt in
     \?)
         #Se o parâmetro introduzido não for válido, apresentar mensagem de erro e sair
         echo "Invalid parameter: -$OPTARG"
+        exit 1
         ;;
     :)
         #Se o parâmetro introduzido precisar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
@@ -109,7 +110,7 @@ function search_dir(){
         fi
     done
 
-    directories=($(printf "%s\n" "${directories[@]}" | sort | uniq)) #Remover diretórios duplicados
+    directories=($(printf "%s\n" "${directories[@]}" | sort -u)) #Remover diretórios duplicados
 
     echo "${directories[*]}"   #Devolver a lista de diretórios e subdiretórios
 }
@@ -152,4 +153,3 @@ function search_files(){
 }
 
 search_files "$@"
-echo

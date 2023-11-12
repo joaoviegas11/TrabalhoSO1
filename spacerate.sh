@@ -41,6 +41,7 @@ case $opt in
     \?)
         #Se o parâmetro introduzido não for válido, apresentar mensagem de erro e sair
         echo "Invalid parameter: -$OPTARG"
+        exit 1
         ;;
     :)
         #Se o parâmetro introduzido precisar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
@@ -61,6 +62,10 @@ fi
 
 
 function read_files(){
+#A função recebe dois ficheiros com parametros
+#$1 é ficheiro novo
+#$2 é ficheiro antigo
+
 
 #Leitura do novo ficheiro
 local firstLine=1 
@@ -73,10 +78,10 @@ while read -r line; do
     #Separação do espaço do ficheiro do diretório por linha 
     space=$(echo "$line" | cut -d " " -f1)
     dir=$(echo "$line" | cut -d " " -f2-)
-    #Adequação do espaço do ficheiro em diretório aos arrays 
+    #Alocagem do espaço do ficheiro nos arrays no índice diretório 
     newArray["$dir"]="$space"
     diffArray["$dir"]="$space"
-done < "$2" #Remoção da primeira linha do ficheiro
+done < "$1" #Remoção da primeira linha do ficheiro
 
 #Leitura do antigo ficheiro
 firstLine=1
