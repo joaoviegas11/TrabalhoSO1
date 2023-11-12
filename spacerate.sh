@@ -1,4 +1,4 @@
-#Declaração dos Arrays tipo Array["dir"]=space
+#Declaração dos Arrays tipo Array[dir"]=pace
 declare -A newArray
 declare -A oldArray
 declare -A diffArray
@@ -70,7 +70,7 @@ function read_files(){
 #Leitura do novo ficheiro
 local firstLine=1 
 while read -r line; do
-    #Ignora a primeira linha
+    #Ignorar a primeira linha
     if [[ $firstLine == 1 ]]; then
         firstLine=0
         continue
@@ -79,20 +79,23 @@ while read -r line; do
     space=$(echo "$line" | cut -d " " -f1)
     dir=$(echo "$line" | cut -d " " -f2-)
     #Alocagem do espaço do ficheiro nos arrays no índice diretório 
-    newArray["$dir"]="$space"
-    diffArray["$dir"]="$space"
+    newArray[$dir]="$space"
+    diffArray[$dir]="$space"
 done < "$1" #Remoção da primeira linha do ficheiro
 
 #Leitura do antigo ficheiro
 firstLine=1
 while read -r line; do
+    #Ignorar a primeira linha
     if [[ $firstLine == 1 ]]; then
         firstLine=0
         continue
     fi
+    #Separação do espaço do ficheiro do diretório por linha 
     space=$(echo "$line" | cut -d " " -f1)
     dir=$(echo "$line" | cut -d " " -f2-)
-    oldArray["$dir"]="$space"
+    #Alocagem do espaço do ficheiro nos arrays no índice diretório 
+    oldArray[$dir]="$space"
 done < "$2"
 }
 
@@ -100,11 +103,11 @@ function calc_difference(){
 for dir in "${!oldArray[@]}"; do
     #Verifica se algum do espaços é NA
     if [[ "${oldArray[$dir]}" == "NA" || "${newArray[$dir]}" == "NA" ]]; then
-        diffArray["$dir"]="NA"
+        diffArray[$dir]="NA"
     #Verifica se existe no newArray o index $dir
     else
         #Cálculo da diferença dos espaços 
-        diffArray["$dir"]=$((newArray["$dir"] - oldArray["$dir"]))
+        diffArray[$dir]=$((newArray[$dir] - oldArray[$dir]))
     fi
 done
 
