@@ -60,14 +60,20 @@ fi
 
 function read_files(){
 
+notfirst=1
 #Leitura do novo ficheiro
 while read -r line; do
+    if [[ $notfirst == 1 ]]; then
+        notfirst=0
+        continue
+    fi
     #Sepação do espaço do ficheiro do diretorio por linha 
     space=$(echo "$line" | cut -d " " -f1)
     dir=$(echo "$line" | cut -d " " -f2-)
     #Adicação do espaço do ficheiro em diretorio aos arrays 
     newArray["$dir"]="$space"
-done < <(tail -n +2 "$2") #Remoção da primeira linha do ficheiro
+    diffArray["$dir"]="$space"
+done < "$2" #Remoção da primeira linha do ficheiro
 
 #Leitura do antigo ficheiro
 while read -r line; do
@@ -78,38 +84,36 @@ done < <(tail -n +2 "$1")
 }
 
 function calc_difference(){
-for i in "${!oldArray[@]}"; do
+for dir in "${!oldArray[@]}"; do
     #Verifica se algum do espaços é NA
-    if [[ "${oldArray[$i]}" == "NA" || "${newArray[$i]}" == "NA" ]]; then
-        diffArray["$i"]="NA"
-    #Verifica se existe no newArray o index $i
-    elif [[ -n "${newArray[$i]}" ]]; then
+    if [[ "${oldArray[$dir]}" == "NA" || "${newArray[$dir]}" == "NA" ]]; then
+        diffArray["$dir"]="NA"
+    #Verifica se existe no newArray o index $dir
+    elif [[ -n "${newArray[$dir]}" ]]; then
         #Calculo da difereça dos espaços 
-        diffArray["$i"]=$((newArray["$i"] - oldArray["$i"]))
+        diffArray["$dir"]=$((newArray["$dir"] - oldArray["$dir"]))
     else
         #Calculo da difereça dos espaços 
-        diffArray["$i"]=$((-oldArray["$i"]))
+        diffArray["$dir"]=$((-oldArray["$dir"]))
     fi
 done
 
 echo "SIZE NAME"
-for i in "${!diffArray[@]}"; do
+for dir in "${!diffArray[@]}"; do
     local memory=""
     #Se o diretorio não exirtir no novo ficheiro
-    if [[ -z "${newArray[$i]}" ]]; then
+    if [[ -z "${newArray[$dir]}" ]]; then
         memory="REMOVED"
     #Se o diretorio não exirtir no antigo ficheiro
-    elif [[ -z "${oldArray[$i]}" ]]; then
+    elif [[ -z "${oldArray[$dir]}" ]]; then
         memory="NEW"
     fi
-    #echo "${diffArray[$i]} $i $memory"
-    #Problema NA
-    if [[ "${diffArray[$i]}" != "NA" ]]; then
-        echo "${diffArray[$i]} $i $memory"
+    #Ignora caso em um dos ficheiros não tiver o espaço
+    if [[ "${diffArray[$dir]}" != "NA" ]]; then
+        echo "${diffArray[$dir]} $dir $memory"
     fi
-
     done  | if [[ "$limit" -gt 0 ]]; then
-        #Limitar o número de linhas
+    #Limitar o número de linhas e ordenar
         sort "$sort_options" | head -n "$limit"
         else
             sort "$sort_options"

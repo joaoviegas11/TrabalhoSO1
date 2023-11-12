@@ -138,10 +138,10 @@ function search_files(){
         fi
 
     done | if [[ "$limit" -gt 0 ]]; then
-        #Limitar o número de linhas
+    #Limitar o número de linhas e ordenar
         sort "$sort_options" | head -n "$limit"
-        else
-            sort "$sort_options"
+    else
+        sort "$sort_options"
     fi
 
 }
