@@ -5,7 +5,7 @@ declare -A diffArray
 
 #Declaração de variáveis
 declare limit=0             #Variável para indicar se a opção -l foi usada que guarda o número de linhas a imprimir
-declare sort_options="-k 1,1nr"     #Váriavel para guardar as opções de ordenação, por defeito será ordenar por tamanho decrescente
+declare sort_options="-k 1,1nr"     #Variável para guardar as opções de ordenação, por defeito será ordenar por tamanho decrescente
 
 #Ciclo que verifica quais os argumentos de chamada usados
 while getopts ":l:ar" opt; do 
@@ -39,11 +39,11 @@ case $opt in
         fi
         ;;
     \?)
-        #Se o parametro introduzido não for válido, apresentar mensagem de erro e sair
+        #Se o parâmetro introduzido não for válido, apresentar mensagem de erro e sair
         echo "Invalid parameter: -$OPTARG"
         ;;
     :)
-        #Se o parametro introduzido precisar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
+        #Se o parâmetro introduzido precisar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
         echo "Parameter -$OPTARG needs an argument."
         exit 1
         ;;
@@ -62,27 +62,33 @@ fi
 
 function read_files(){
 
-notfirst=1
 #Leitura do novo ficheiro
+local firstLine=1 
 while read -r line; do
-    if [[ $notfirst == 1 ]]; then
-        notfirst=0
+    #Ignora a primeira linha
+    if [[ $firstLine == 1 ]]; then
+        firstLine=0
         continue
     fi
-    #Sepação do espaço do ficheiro do diretorio por linha 
+    #Separação do espaço do ficheiro do diretório por linha 
     space=$(echo "$line" | cut -d " " -f1)
     dir=$(echo "$line" | cut -d " " -f2-)
-    #Adicação do espaço do ficheiro em diretorio aos arrays 
+    #Adequação do espaço do ficheiro em diretório aos arrays 
     newArray["$dir"]="$space"
     diffArray["$dir"]="$space"
 done < "$2" #Remoção da primeira linha do ficheiro
 
 #Leitura do antigo ficheiro
+firstLine=1
 while read -r line; do
+    if [[ $firstLine == 1 ]]; then
+        firstLine=0
+        continue
+    fi
     space=$(echo "$line" | cut -d " " -f1)
     dir=$(echo "$line" | cut -d " " -f2-)
     oldArray["$dir"]="$space"
-done < <(tail -n +2 "$1")
+done < "$2"
 }
 
 function calc_difference(){
@@ -91,22 +97,19 @@ for dir in "${!oldArray[@]}"; do
     if [[ "${oldArray[$dir]}" == "NA" || "${newArray[$dir]}" == "NA" ]]; then
         diffArray["$dir"]="NA"
     #Verifica se existe no newArray o index $dir
-    elif [[ -n "${newArray[$dir]}" ]]; then
-        #Calculo da difereça dos espaços 
-        diffArray["$dir"]=$((newArray["$dir"] - oldArray["$dir"]))
     else
-        #Calculo da difereça dos espaços 
-        diffArray["$dir"]=$((-oldArray["$dir"]))
+        #Cálculo da diferença dos espaços 
+        diffArray["$dir"]=$((newArray["$dir"] - oldArray["$dir"]))
     fi
 done
 
 echo "SIZE NAME"
 for dir in "${!diffArray[@]}"; do
     local memory=""
-    #Se o diretorio não exirtir no novo ficheiro
+    #Se o diretório não existir no novo ficheiro
     if [[ -z "${newArray[$dir]}" ]]; then
         memory="REMOVED"
-    #Se o diretorio não exirtir no antigo ficheiro
+    #Se o diretório não existir no antigo ficheiro
     elif [[ -z "${oldArray[$dir]}" ]]; then
         memory="NEW"
     fi
