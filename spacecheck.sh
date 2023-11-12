@@ -5,12 +5,12 @@
 #João Viegas        113144
 
 #Declaração de variáveis
-declare script_dir=$(pwd)   #Diretorio em que o script se encontra quando executado
-declare regex=".*"          #Variável para filtar os ficheiros por nome, por defeito será qualquer nome
+declare script_dir=$(pwd)   #Diretório em que o script se encontra quando executado
+declare regex=".*"          #Variável para filtrar os ficheiros por nome, por defeito será qualquer nome
 declare dataDate="now"      #Variável para filtrar os ficheiros por data, por defeito será a data atual
 declare limitFilter=0       #Variável para filtrar os ficheiros por tamanho, por defeito será 0
 declare limit=0             #Variável para indicar se a opção -l foi usada que guarda o número de linhas a imprimir
-declare sort_options="-k 1,1nr"     #Váriavel para guardar as opções de ordenação, por defeito será ordenar por tamanho decrescente
+declare sort_options="-k 1,1nr"     #Variável para guardar as opções de ordenação, por defeito será ordenar por tamanho decrescente
 
 #É necessário imprimir o cabeçalho antes de se fazer shift para que os argumentos de chamada não sejam alterados
 echo "SIZE NAME $(date +'%Y%m%d') $@"   
@@ -24,10 +24,10 @@ case $opt in
         ;;
     d)  
         if date -d "$OPTARG" &>/dev/null; then
-            #Se a opção -d for usada e o valor for valido, alterar o valor da variável dataDate
+            #Se a opção -d for usada e o valor for válido, alterar o valor da variável dataDate
             dataDate=$OPTARG  
         else
-            #Se o valor não for valido, apresentar mensagem de erro e sair
+            #Se o valor não for válido, apresentar mensagem de erro e sair
             echo "Argument is not valid date."
             exit 1
         fi
@@ -71,11 +71,11 @@ case $opt in
         fi
         ;;
     \?)
-        #Se o parametro introduzido não for válido, apresentar mensagem de erro e sair
+        #Se o parâmetro introduzido não for válido, apresentar mensagem de erro e sair
         echo "Invalid parameter: -$OPTARG"
         ;;
     :)
-        #Se o parametro introduzido precisar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
+        #Se o parâmetro introduzido precisar de um argumento que não foi introduzido, apresentar mensagem de erro e sair
         echo "Parameter -$OPTARG needs an argument."
         exit 1
         ;;
@@ -115,7 +115,7 @@ function search_dir(){
 }
 
 function search_files(){
-    #Função que receberá a lsita devolvida pela função search_dir e irá calcular o tamanho dos ficheiros presentes nesses diretórios
+    #Função que receberá a lista devolvida pela função search_dir e irá calcular o tamanho dos ficheiros presentes nesses diretórios
 
     local IFS=$'\n'     #Variável que irá separar os elementos da lista por linha
 
@@ -123,7 +123,7 @@ function search_files(){
 
     for dir in "${directories[@]}"; do   #Ciclo for para percorrer a lista recebida
 
-        #Se o diretório existir e todos os ficheiros deste forem legiveis
+        #Se o diretório existir e todos os ficheiros deste forem legíveis
         if cd $dir 2>/dev/null && [ -z "$(find . -type f ! -readable)" ]; then
 
         size=0      #Variável para guardar o tamanho total dos ficheiros no diretório
@@ -138,7 +138,7 @@ function search_files(){
         echo "$size $(realpath --relative-to="$script_dir" "$dir")"
 
         else
-            #Se o diretório não existir ou algum dos ficheiros não for legivel, imprimir NA e o caminho relativo do diretório
+            #Se o diretório não existir ou algum dos ficheiros não for legível, imprimir NA e o caminho relativo do diretório
             echo "NA $(realpath --relative-to="$script_dir" "$dir")"
         fi
 
