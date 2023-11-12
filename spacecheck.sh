@@ -10,7 +10,8 @@ declare regex=".*"          #Variável para filtar os ficheiros por nome, por de
 declare dataDate="now"      #Variável para filtrar os ficheiros por data, por defeito será a data atual
 declare limitFilter=0       #Variável para filtrar os ficheiros por tamanho, por defeito será 0
 declare limit=0             #Variável para indicar se a opção -l foi usada que guarda o número de linhas a imprimir
-declare sort_options="-k 1,1nr"
+declare sort_options="-k 1,1nr"     #Váriavel para guardar as opções de ordenação, por defeito será ordenar por tamanho decrescente
+
 #É necessário imprimir o cabeçalho antes de se fazer shift para que os argumentos de chamada não sejam alterados
 echo "SIZE NAME $(date +'%Y%m%d') $@"   
 
@@ -43,8 +44,10 @@ case $opt in
         ;;
     a)
         if [[ "$sort_options" != "-k 1,1nr" ]]; then
+            #Ordenar por ordem alfabética inversa
             sort_options="-k 2r"
         else 
+            #Ordenar por ordem alfabética
             sort_options=$"-k 2"
         fi
         ;;
@@ -60,8 +63,10 @@ case $opt in
         ;;
     r)
         if [[ "$sort_options" != "-k 1,1nr" ]]; then
+            #Ordenar por ordem alfabética inversa
             sort_options+="r"
         else 
+            #Ordenar por ordem crescente
             sort_options=$"-k 1,1n"
         fi
         ;;
