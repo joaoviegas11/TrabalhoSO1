@@ -152,3 +152,4 @@ function search_files(){
 }
 
 search_files "$@"
+echo
